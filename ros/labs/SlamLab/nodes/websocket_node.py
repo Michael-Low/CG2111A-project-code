@@ -28,16 +28,16 @@ def websocketThread(setupBarrier:Barrier=None, readyBarrier:Barrier=None):
     print("Exiting Websocket Recv Thread")
 
 async def server(ctx):
-    server_task = asyncio.create_task(start_server())
+    recv_server_task = asyncio.create_task(start_recv_server())
     
     while not ctx.isExit():
         await asyncio.sleep(1)
-    server_task.cancel()
+    recv_server_task.cancel()
 
-async def echo(websocket):
+async def recvCommands(websocket):
     params = [0] * 16
     params[1] = 100
-    print("New connection established.")
+    print("Recv websocket connection established.")
     try:
         while True:
             message = await websocket.recv()
@@ -56,13 +56,12 @@ async def echo(websocket):
             publish(ARDUINO_SEND_TOPIC, commandPacket)
             await websocket.send(f"Echo: {message}")
     except websockets.exceptions.ConnectionClosedOK:
-        print("Connection closed.")
+        print("Recv websocket connection Closed.")
     finally:
         commandPacket = (TPacketType.PACKET_TYPE_COMMAND, TCommandType.COMMAND_STOP, params)
         publish(ARDUINO_SEND_TOPIC, commandPacket)
         print("stopping robot")
 
-
-async def start_server():
-    server = await serve(echo, "", 8765)
+async def start_recv_server():
+    server = await serve(recvCommands, "", 8765)
     await server.serve_forever()

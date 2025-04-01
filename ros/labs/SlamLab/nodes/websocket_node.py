@@ -35,6 +35,8 @@ async def server(ctx):
     server_task.cancel()
 
 async def echo(websocket):
+    params = [0] * 16
+    params[1] = 100
     print("New connection established.")
     try:
         while True:
@@ -50,11 +52,16 @@ async def echo(websocket):
                     command = TCommandType.COMMAND_TURN_RIGHT
                 case "s":
                     command = TCommandType.COMMAND_STOP
-            commandPacket = (TPacketType.PACKET_TYPE_COMMAND, command, 100)
+            commandPacket = (TPacketType.PACKET_TYPE_COMMAND, command, params)
             publish(ARDUINO_SEND_TOPIC, commandPacket)
             await websocket.send(f"Echo: {message}")
     except websockets.exceptions.ConnectionClosedOK:
         print("Connection closed.")
+    finally:
+        commandPacket = (TPacketType.PACKET_TYPE_COMMAND, TCommandType.COMMAND_STOP, params)
+        publish(ARDUINO_SEND_TOPIC, commandPacket)
+        print("stopping robot")
+
 
 async def start_server():
     server = await serve(echo, "", 8765)

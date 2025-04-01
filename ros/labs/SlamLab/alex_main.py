@@ -71,7 +71,7 @@ ENABLE_SLAM_NODE = False
 ENABLE_GUI_NODE = False
 ENABLE_CLI_NODE = False
 ENABLE_TLS_SERVER = False
-ENABLE_ARDUNIO_INTERFACE = False
+ENABLE_ARDUNIO_INTERFACE = True
 ENABLE_WEBSOCKETS_SERVER = True
 
 DEBUG_MONITOR_TOPICS = ["arduino/send"]
@@ -282,12 +282,12 @@ def main():
             readyBarrier_monitor_t.wait()
 
         if ENABLE_ARDUNIO_INTERFACE:
-            print("\n============ ARDUINO HANDSHAKE ============")
+            # print("\n============ ARDUINO HANDSHAKE ============")
             # Sending hello to arduino
-            print("Establishing Connection with Arduino. Sending Hello...")
+            # print("Establishing Connection with Arduino. Sending Hello...")
             
             # wait for hello responses 
-            waitForHelloRoutine() # this routine does not use the send thread, instead it sends directly to the serial port
+            # waitForHelloRoutine() # this routine does not use the send thread, instead it sends directly to the serial port
             
             print('\n============ ARDUINO SETUP ============')
             setupBarrier_arduino_t.wait()

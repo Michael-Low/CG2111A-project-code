@@ -19,7 +19,6 @@ TResult readPacket(TPacket *packet)
       return PACKET_INCOMPLETE;
     else
       return deserialize(buffer, len, packet);
-    
 }
 
 void sendStatus()
@@ -139,8 +138,6 @@ void waitForHello() {
 
     if (result == PACKET_OK) {
       if (hello.packetType == PACKET_TYPE_HELLO) {
-
-
         sendOK();
         exit = 1;
       } else
@@ -192,7 +189,6 @@ void handleCommand(TPacket *command) {
 void setupSerial() {
   // To replace later with bare-metal.
   Serial.begin(115200);
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using the other UARTs
 }
 
 // Start the serial connection. For now we are using
@@ -209,11 +205,7 @@ void startSerial() {
 // This will be replaced later with bare-metal code.
 
 int readSerial(char *buffer) {
-
   int count = 0;
-
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using other UARTs
-
   while (Serial.available())
     buffer[count++] = Serial.read();
   return count;
@@ -224,5 +216,4 @@ int readSerial(char *buffer) {
 
 void writeSerial(const char *buffer, int len) {
   Serial.write(buffer, len);
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using other UARTs
 }

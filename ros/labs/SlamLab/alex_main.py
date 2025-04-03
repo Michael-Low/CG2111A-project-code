@@ -55,7 +55,7 @@ VERBOSE = True
 
 # Arduino Serial Constants
 PORT_NAME = "/dev/ttyACM0"
-BAUD_RATE = 9600
+BAUD_RATE = 115200
 BYTE_SIZE = 8
 PARITY = "N"
 STOP_BITS = 1
@@ -65,15 +65,16 @@ FAILED_ATTEMPT_WAIT_SEC = 5
 
 
 # NODE FLAGS
-ENABLE_DEBUG_MESSAGE_MONITOR = False 
-ENABLE_LIDAR_NODE = False
-ENABLE_SLAM_NODE = False
+ENABLE_DEBUG_MESSAGE_MONITOR = True
+ENABLE_LIDAR_NODE = True
+ENABLE_SLAM_NODE = True
 ENABLE_GUI_NODE = False
 ENABLE_CLI_NODE = False
 ENABLE_TLS_SERVER = False
-ENABLE_ARDUNIO_INTERFACE = False
+ENABLE_ARDUNIO_INTERFACE = True
+ENABLE_WEBSOCKETS_SERVER = True
 
-DEBUG_MONITOR_TOPICS = [""]
+DEBUG_MONITOR_TOPICS = ["arduino/send"]
 
 
 
@@ -105,6 +106,9 @@ from nodes.alex_TLSRelay_send_node import TLSSendThread
 
 # DEBUG MESSAGE MONITOR NODE
 from nodes.alex_message_monitor_node import monitorThread
+
+# WEBSOCKETS NODE
+from nodes.websocket_node import websocketThread
 
 
 def main():
@@ -203,6 +207,10 @@ def main():
             setupBarrier_monitor_t = Barrier(monitorNodes + 1) # 1 thread + 1 main thread.
             readyBarrier_monitor_t = Barrier(monitorNodes + 1) # 1 thread + 1 main thread.
 
+        if ENABLE_WEBSOCKETS_SERVER:
+            websocketNodes = 1
+            setupBarrier_ws_t = Barrier(websocketNodes + 1) # 1 thread + 1 main thread.
+            readyBarrier_ws_t = Barrier(websocketNodes + 1) # 1 thread + 1 main thread.
 
         if ENABLE_DEBUG_MESSAGE_MONITOR:
             # Adding Monitor Thread
@@ -254,6 +262,11 @@ def main():
             mgr.add_thread(target=TLSSendThread, 
                    name="TLS Relay Send Thread",
                    kwargs={"setupBarrier": setupBarrierNetworkTLS_t, "readyBarrier": readyBarrierNetworkTLS_t})
+        
+        if ENABLE_WEBSOCKETS_SERVER:
+            mgr.add_thread(target=websocketThread,
+                    name="websocket thread",
+                    kwargs={"setupBarrier": setupBarrier_ws_t, "readyBarrier": readyBarrier_ws_t})
             
 
 
@@ -269,12 +282,12 @@ def main():
             readyBarrier_monitor_t.wait()
 
         if ENABLE_ARDUNIO_INTERFACE:
-            print("\n============ ARDUINO HANDSHAKE ============")
+            # print("\n============ ARDUINO HANDSHAKE ============")
             # Sending hello to arduino
-            print("Establishing Connection with Arduino. Sending Hello...")
+            # print("Establishing Connection with Arduino. Sending Hello...")
             
             # wait for hello responses 
-            waitForHelloRoutine() # this routine does not use the send thread, instead it sends directly to the serial port
+            # waitForHelloRoutine() # this routine does not use the send thread, instead it sends directly to the serial port
             
             print('\n============ ARDUINO SETUP ============')
             setupBarrier_arduino_t.wait()
@@ -307,6 +320,11 @@ def main():
             print("\n============ CLI SETUP ============")
             setupBarrier_ui_t.wait()
             readyBarrier_ui_t.wait()
+
+        if ENABLE_WEBSOCKETS_SERVER:
+            print("\n============ WEBSOCKETS SETUP ============")
+            setupBarrier_ws_t.wait()
+            readyBarrier_ws_t.wait()
 
 
         #Wait for threads to finish, then clean up and exit gracefully

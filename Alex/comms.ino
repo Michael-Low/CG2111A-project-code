@@ -200,7 +200,7 @@ void handleCommand(TPacket *command) {
 // with bare-metal code.
 void setupSerial() {
   // To replace later with bare-metal.
-  Serial.begin(9600);
+  Serial.begin(115200);
   // Change Serial to Serial2/Serial3/Serial4 in later labs when using the other UARTs
 }
 

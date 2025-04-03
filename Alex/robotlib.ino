@@ -57,7 +57,7 @@ void move(float speed, int direction)
 }
 
 long computeDeltaTicks(float angle) {
-  return (angle > 0) ? (angle * TICKS_PER_90DEG / 90)) : 9999;
+  return (angle > 0) ? (angle * TICKS_PER_90DEG / 90) : 9999;
 }
 
 void forward(float target_dist, float speed)

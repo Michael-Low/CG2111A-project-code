@@ -3,3 +3,8 @@
 *.key
 *.pem
 env
+*.egg-info
+*.log
+_pycache
+*.pyc
+BreezySLAM

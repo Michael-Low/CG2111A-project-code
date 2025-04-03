@@ -60,7 +60,7 @@ async def send_map_data(websocket):
 
 async def recv_commands(websocket):
     params = [0] * 16
-    params[1] = 100
+    params[0] = 10
     print("Receiving websocket connection established.")
     try:
         while True:
@@ -68,15 +68,25 @@ async def recv_commands(websocket):
             print(f"Command received: {message}")
             match message:
                 case "f":
+                    params[1] = 70
                     command = TCommandType.COMMAND_FORWARD
                 case "b":
+                    params[1] = 70
                     command = TCommandType.COMMAND_REVERSE
                 case "l":
+                    params[1] = 100
                     command = TCommandType.COMMAND_TURN_LEFT
                 case "r":
+                    params[1] = 100
                     command = TCommandType.COMMAND_TURN_RIGHT
                 case "s":
                     command = TCommandType.COMMAND_STOP
+                case "color":
+                    command = TCommandType.COMMAND_GET_COLOR
+                case "open":
+                    command = TCommandType.COMMAND_OPEN_CLAW
+                case "close":
+                    command = TCommandType.COMMAND_CLOSE_CLAW
             commandPacket = (TPacketType.PACKET_TYPE_COMMAND, command, params)
             publish(ARDUINO_SEND_TOPIC, commandPacket)
             await websocket.send(f"Echo: {message}")

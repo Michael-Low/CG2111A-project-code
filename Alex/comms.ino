@@ -149,35 +149,6 @@ void waitForHello() {
   }  // !exit
 }
 
-void handleCommand(TPacket *command) {
-  switch (command->command) {
-    // For movement commands, param[0] = distance, param[1] = speed.
-    case COMMAND_FORWARD:
-      forward((float)command->params[0], (float)command->params[1]);
-      break;
-    case COMMAND_REVERSE:
-      backward((float)command->params[0], (float)command->params[1]);
-      break;
-    case COMMAND_TURN_LEFT:
-      left((float)command->params[0], (float)command->params[1]);
-      break;
-    case COMMAND_TURN_RIGHT:
-      right((float)command->params[0], (float)command->params[1]);
-      break;
-    case COMMAND_STOP:
-      stop();
-      break;
-    case COMMAND_GET_STATS:
-      sendStatus();
-      break;
-    case COMMAND_CLEAR_STATS:
-      clearOneCounter(command->params[0]);
-      break;
-    default:
-      sendBadCommand();
-  }
-}
-
 /*
  * Setup and start codes for serial communications
  * 

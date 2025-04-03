@@ -60,6 +60,9 @@ class TCommandType(enum.Enum):
     COMMAND_STOP = 4
     COMMAND_GET_STATS = 5
     COMMAND_CLEAR_STATS = 6
+    COMMAND_OPEN_CLAW = 7
+    COMMAND_CLOSE_CLAW = 8
+    COMMAND_GET_COLOR = 9
 
 class TResultType(enum.Enum):
     """

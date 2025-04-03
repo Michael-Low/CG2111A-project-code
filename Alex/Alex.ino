@@ -138,10 +138,10 @@ void handleCommand(TPacket *command) {
       clearOneCounter(command->params[0]);
       break;
     case COMMAND_CLOSE_CLAW:
-      closeClaw()
+      closeclaw();
       break;
     case COMMAND_OPEN_CLAW:
-      openClaw()
+      openclaw();
     case COMMAND_GET_COLOR:
       //TODO: implement
       break;

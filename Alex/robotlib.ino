@@ -35,13 +35,13 @@ void move(float speed, int direction)
         motorBL.run(FORWARD);
         motorBR.run(BACKWARD); 
       break;
-      case RIGHT:
+      case LEFT:
         motorBR.run(FORWARD); 
         motorFL.run(FORWARD);
         motorFR.run(FORWARD);
         motorBL.run(FORWARD);
       break;
-      case LEFT:
+      case RIGHT:
         motorFL.run(BACKWARD);
         motorFR.run(BACKWARD);
         motorBL.run(BACKWARD);

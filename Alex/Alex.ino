@@ -25,11 +25,12 @@
 
 // Store the ticks from Alex's left and
 // right encoders.
-volatile long leftTicks;
-volatile long rightTicks;
+volatile long leftTicks = 0;
+volatile long rightTicks = 0;
 
+volatile int dir = STOP;
 // Forward and backward distance traveled
-volatile long dist;
+volatile long dist = 0;
 
 // keep track of distance to move
 volatile long newDist;

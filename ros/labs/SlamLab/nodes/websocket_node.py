@@ -54,7 +54,7 @@ async def send_map_data(websocket):
                 await websocket.send(str(y))
                 await websocket.send(str(theta))
                 await websocket.send(mapbytes)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.1)
     except websockets.exceptions.ConnectionClosedOK:
         print("Sending websocket connection closed.")
 

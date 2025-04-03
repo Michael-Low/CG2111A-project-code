@@ -19,7 +19,6 @@ TResult readPacket(TPacket *packet)
       return PACKET_INCOMPLETE;
     else
       return deserialize(buffer, len, packet);
-    
 }
 
 void sendStatus()
@@ -55,8 +54,6 @@ void sendMessage(const char *message)
   messagePacket.packetType=PACKET_TYPE_MESSAGE;
   strncpy(messagePacket.data, message, MAX_STR_LEN);
   sendResponse(&messagePacket);
-
-  
 }
 
 void dbprintf(char *format,...) {
@@ -141,8 +138,6 @@ void waitForHello() {
 
     if (result == PACKET_OK) {
       if (hello.packetType == PACKET_TYPE_HELLO) {
-
-
         sendOK();
         exit = 1;
       } else
@@ -158,31 +153,24 @@ void handleCommand(TPacket *command) {
   switch (command->command) {
     // For movement commands, param[0] = distance, param[1] = speed.
     case COMMAND_FORWARD:
-      sendOK();
       forward((float)command->params[0], (float)command->params[1]);
       break;
     case COMMAND_REVERSE:
-      sendOK();
       backward((float)command->params[0], (float)command->params[1]);
       break;
     case COMMAND_TURN_LEFT:
-      sendOK();
       left((float)command->params[0], (float)command->params[1]);
       break;
     case COMMAND_TURN_RIGHT:
-      sendOK();
       right((float)command->params[0], (float)command->params[1]);
       break;
     case COMMAND_STOP:
-      sendOK();
       stop();
       break;
     case COMMAND_GET_STATS:
-      sendOK();
       sendStatus();
       break;
     case COMMAND_CLEAR_STATS:
-      sendOK();
       clearOneCounter(command->params[0]);
       break;
     default:
@@ -201,7 +189,6 @@ void handleCommand(TPacket *command) {
 void setupSerial() {
   // To replace later with bare-metal.
   Serial.begin(115200);
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using the other UARTs
 }
 
 // Start the serial connection. For now we are using
@@ -218,14 +205,9 @@ void startSerial() {
 // This will be replaced later with bare-metal code.
 
 int readSerial(char *buffer) {
-
   int count = 0;
-
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using other UARTs
-
   while (Serial.available())
     buffer[count++] = Serial.read();
-
   return count;
 }
 
@@ -234,5 +216,4 @@ int readSerial(char *buffer) {
 
 void writeSerial(const char *buffer, int len) {
   Serial.write(buffer, len);
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using other UARTs
 }

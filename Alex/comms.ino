@@ -45,6 +45,14 @@ void sendStatus()
   sendResponse(&statusPacket);
 }
 
+void sendColor(Tcolor color) {
+  TPacket colorPacket;
+  colorPacket.packetType = PACKET_TYPE_RESPONSE;
+  colorPacket.command = RESP_COLOR;
+  colorPacket.params[0] = color;
+  sendResponse(&colorPacket);
+}
+
 void sendMessage(const char *message)
 {
   // Sends text messages back to the Pi. Useful

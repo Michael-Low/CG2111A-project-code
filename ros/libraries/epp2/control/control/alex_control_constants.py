@@ -39,6 +39,7 @@ class TResponseType(enum.Enum):
     RESP_BAD_CHECKSUM = 3
     RESP_BAD_COMMAND = 4
     RESP_BAD_RESPONSE = 5
+    RESP_COLOR = 6
 
 class TCommandType(enum.Enum):
     """
@@ -80,6 +81,11 @@ class TResultType(enum.Enum):
     PACKET_CHECKSUM_BAD = 2
     PACKET_INCOMPLETE = 3
     PACKET_COMPLETE = 4
+
+class Tcolor(enum.enum):
+    RED = 0
+    GREEN = 1
+    UNKNOWN = 2
 
 ##########################
 ######## Packets #########

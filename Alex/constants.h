@@ -23,7 +23,8 @@ typedef enum {
   RESP_BAD_PACKET = 2,
   RESP_BAD_CHECKSUM = 3,
   RESP_BAD_COMMAND = 4,
-  RESP_BAD_RESPONSE = 5
+  RESP_BAD_RESPONSE = 5,
+  RESP_COLOR = 6,
 } TResponseType;
 
 
@@ -52,4 +53,10 @@ typedef enum {
   RIGHT = 4,
   STOP = 5
 } TDirection;
+
+typedef enum {
+  RED = 0,
+  GREEN = 1,
+  UNKNOWN = 2,
+} Tcolor;
 #endif

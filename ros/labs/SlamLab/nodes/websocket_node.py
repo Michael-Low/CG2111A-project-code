@@ -60,7 +60,7 @@ async def send_map_data(websocket):
 
 async def recv_commands(websocket):
     params = [0] * 16
-    params[0] = 10
+    params[0] = 7
     print("Receiving websocket connection established.")
     try:
         while True:
@@ -68,10 +68,10 @@ async def recv_commands(websocket):
             print(f"Command received: {message}")
             match message:
                 case "f":
-                    params[1] = 70
+                    params[1] = 50
                     command = TCommandType.COMMAND_FORWARD
                 case "b":
-                    params[1] = 70
+                    params[1] = 50
                     command = TCommandType.COMMAND_REVERSE
                 case "l":
                     params[1] = 100

@@ -108,7 +108,6 @@ void clearOneCounter(int which) {
   clearCounters();
 }
 // Intialize Alex's internal states
-
 void initializeState() {
   clearCounters();
 }
@@ -142,7 +141,9 @@ void handleCommand(TPacket *command) {
       break;
     case COMMAND_OPEN_CLAW:
       openclaw();
+      break;
     case COMMAND_GET_COLOR:
+      sendColor(RED);
       //TODO: implement
       break;
     default:

@@ -55,7 +55,7 @@ VERBOSE = True
 
 # Arduino Serial Constants
 PORT_NAME = "/dev/ttyACM0"
-BAUD_RATE = 9600
+BAUD_RATE = 115200
 BYTE_SIZE = 8
 PARITY = "N"
 STOP_BITS = 1

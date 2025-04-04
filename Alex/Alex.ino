@@ -32,9 +32,7 @@ volatile int dir = STOP;
 // Forward and backward distance traveled
 volatile long dist = 0;
 
-// keep track of distance to move
-volatile long newDist;
-volatile long newTicks;
+volatile long stop_time = 0;
 
 /*
  * Setup and start codes for external interrupts and 
@@ -116,16 +114,16 @@ void handleCommand(TPacket *command) {
   switch (command->command) {
     // For movement commands, param[0] = distance, param[1] = speed.
     case COMMAND_FORWARD:
-      forward((float)command->params[0], (float)command->params[1]);
+      forward(command->params[0], (float)command->params[1]);
       break;
     case COMMAND_REVERSE:
-      backward((float)command->params[0], (float)command->params[1]);
+      backward(command->params[0], (float)command->params[1]);
       break;
     case COMMAND_TURN_LEFT:
-      left((float)command->params[0], (float)command->params[1]);
+      left(command->params[0], (float)command->params[1]);
       break;
     case COMMAND_TURN_RIGHT:
-      right((float)command->params[0], (float)command->params[1]);
+      right(command->params[0], (float)command->params[1]);
       break;
     case COMMAND_STOP:
       stop();
@@ -199,22 +197,8 @@ void loop() {
   }
 
   if (dir != STOP) {
-    if (dir == FORWARD) {
-      if (newDist < dist) {
-        stop();
-      }
-    } else if (dir == BACKWARD) {
-      if (newDist > dist) {
-        stop();
-      }
-    } else if (dir == LEFT) {
-      if (newTicks < rightTicks) {
-        stop();
-      }
-    } else {
-      if (newTicks < leftTicks) {
-        stop();
-      }
+    if(millis() > stop_time) {
+      stop();
     }
   }
 }

@@ -51,14 +51,14 @@ async def send_map_data(websocket):
         await websocket.recv()
         while True:
             messages = getMessages()
-            if(messages):
+            if(len(messages) > 0):
                 x, y, theta, mapbytes = PubSubMsg.getPayload(messages[-1])
                 await websocket.send(str(x))
                 await websocket.send(str(y))
                 await websocket.send(str(theta))
                 await websocket.send(mapbytes)
                 await websocket.recv() # wait for all data to be received on laptop side
-                await asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
     except Exception as e:
         print(f"Map WS exception: {e}")
     finally:
@@ -66,7 +66,6 @@ async def send_map_data(websocket):
 
 async def recv_commands(websocket):
     params = [0] * 16
-    params[0] = 7
     print("Receiving websocket connection established.")
     try:
         while True:
@@ -74,15 +73,19 @@ async def recv_commands(websocket):
             print(f"Command received: {message}")
             match message:
                 case "f":
+                    params[0] = 120
                     params[1] = 50
                     command = TCommandType.COMMAND_FORWARD
                 case "b":
+                    params[0] = 120
                     params[1] = 50
                     command = TCommandType.COMMAND_REVERSE
                 case "l":
+                    params[0] = 120
                     params[1] = 100
                     command = TCommandType.COMMAND_TURN_LEFT
                 case "r":
+                    params[0] = 120
                     params[1] = 100
                     command = TCommandType.COMMAND_TURN_RIGHT
                 case "s":
@@ -93,6 +96,10 @@ async def recv_commands(websocket):
                     command = TCommandType.COMMAND_OPEN_CLAW
                 case "close":
                     command = TCommandType.COMMAND_CLOSE_CLAW
+                case "creep":
+                    params[0] = 50
+                    params[1] = 50
+                    command = TCommandType.COMMAND_FORWARD
             commandPacket = (TPacketType.PACKET_TYPE_COMMAND, command, params)
             publish(ARDUINO_SEND_TOPIC, commandPacket)
             await websocket.send(f"Echo: {message}")

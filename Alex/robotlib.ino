@@ -60,29 +60,32 @@ long computeDeltaTicks(float angle) {
   return (angle > 0) ? (angle * TICKS_PER_90DEG / 90) : 9999;
 }
 
-void forward(float target_dist, float speed)
+void forward(int time, float speed)
 {
-  newDist = dist + ((target_dist > 0) ? target_dist : 9999);
+  stop_time = millis() + time;
   dir = FORWARD;
   move(speed, FORWARD);
 }
 
-void backward(float target_dist, float speed)
+void backward(int time, float speed)
 { 
+  stop_time = millis() + time;
   newDist = dist - ((target_dist > 0) ? target_dist : 9999);
   dir = BACKWARD;
   move(speed, BACKWARD);
 }
 
-void left(float angle, float speed)
+void left(int time, float speed)
 {
+  stop_time = millis() + time;
   dir = LEFT;
   move(speed, LEFT);
   newTicks = rightTicks + computeDeltaTicks(angle);
 }
 
-void right(float angle, float speed)
+void right(int time, float speed)
 {
+  stop_time = millis() + time;
   dir = RIGHT;
   move(speed, RIGHT);
   newTicks = leftTicks + computeDeltaTicks(angle);

@@ -82,7 +82,7 @@ class TResultType(enum.Enum):
     PACKET_INCOMPLETE = 3
     PACKET_COMPLETE = 4
 
-class Tcolor(enum.enum):
+class Tcolor(enum.Enum):
     RED = 0
     GREEN = 1
     UNKNOWN = 2

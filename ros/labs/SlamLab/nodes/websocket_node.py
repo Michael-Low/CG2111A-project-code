@@ -11,6 +11,7 @@ from pubsub.pub_sub_manager import publish, subscribe, unsubscribe, getMessages,
 # Constants
 ARDUINO_SEND_TOPIC = "arduino/send"
 SLAM_MAPPOSE_TOPIC = "slam/mappose"
+COLOR_SENSOR_TOPIC = "sensor/color"
 
 def websocketThread(setupBarrier:Barrier=None, readyBarrier:Barrier=None):
     ctx:ManagedPubSubRunnable = getCurrentExecutionContext()
@@ -46,6 +47,8 @@ async def start_map_server():
 async def send_map_data(websocket):
     print("Sending websocket connection established.")
     try:
+        await websocket.send("hi")
+        await websocket.recv()
         while True:
             messages = getMessages()
             if(messages):
@@ -54,9 +57,12 @@ async def send_map_data(websocket):
                 await websocket.send(str(y))
                 await websocket.send(str(theta))
                 await websocket.send(mapbytes)
+                await websocket.recv() # wait for all data to be received on laptop side
                 await asyncio.sleep(0.1)
-    except websockets.exceptions.ConnectionClosedOK:
-        print("Sending websocket connection closed.")
+    except Exception as e:
+        print(f"Map WS exception: {e}")
+    finally:
+        print("Map WS connection closed.")
 
 async def recv_commands(websocket):
     params = [0] * 16
@@ -90,8 +96,8 @@ async def recv_commands(websocket):
             commandPacket = (TPacketType.PACKET_TYPE_COMMAND, command, params)
             publish(ARDUINO_SEND_TOPIC, commandPacket)
             await websocket.send(f"Echo: {message}")
-    except websockets.exceptions.ConnectionClosedOK:
-        print("Receiving websocket connection closed.")
+    except Exception as e:
+        print(f"Command WS exception: {e}")
     finally:
         commandPacket = (TPacketType.PACKET_TYPE_COMMAND, TCommandType.COMMAND_STOP, params)
         publish(ARDUINO_SEND_TOPIC, commandPacket)

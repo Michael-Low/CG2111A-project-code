@@ -11,12 +11,13 @@ from pubsub.pub_sub_manager import publish, subscribe, unsubscribe, getMessages,
 # Import the required arduino communication modules. Replace or add to the handlers as needed.
 from control.alex_control import receivePacket
 from control.alex_control_constants import  TPacket, TPacketType, PAYLOAD_PARAMS_COUNT, PAYLOAD_PACKET_SIZE
-from control.alex_control_constants import  TResponseType, TResultType
+from control.alex_control_constants import  TResponseType, TResultType, Tcolor
 
 
 # Constants
 PUBLISH_PACKETS = True
 ARDUINO_RECV_TOPIC = "arduino/recv" 
+COLOR_SENSOR_TOPIC = "sensor/color"
 
 
 
@@ -121,6 +122,14 @@ def handleResponse(res: TPacket, publishPackets:bool=False):
         
         if publishPackets:
             publish("arduino/recv", (res.packetType, res.command, params))
+    elif res_type == TResponseType.RESP_COLOR:
+        color = res.params[0]
+        if(color == Tcolor.RED):
+            publish(COLOR_SENSOR_TOPIC, "red")
+        elif(color == Tcolor.GREEN):
+            publish(COLOR_SENSOR_TOPIC, "green")
+        else:
+            publish(COLOR_SENSOR_TOPIC, "unknown")
     else:
         print(f"Arduino sent unknown response type {res_type}")
 

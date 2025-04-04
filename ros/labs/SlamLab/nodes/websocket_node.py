@@ -73,15 +73,15 @@ async def recv_commands(websocket):
             print(f"Command received: {message}")
             match message:
                 case "f":
-                    params[0] = 120
+                    params[0] = 200
                     params[1] = 50
                     command = TCommandType.COMMAND_FORWARD
                 case "b":
-                    params[0] = 120
+                    params[0] = 200
                     params[1] = 50
                     command = TCommandType.COMMAND_REVERSE
                 case "l":
-                    params[0] = 120
+                    params[0] = 200
                     params[1] = 100
                     command = TCommandType.COMMAND_TURN_LEFT
                 case "r":

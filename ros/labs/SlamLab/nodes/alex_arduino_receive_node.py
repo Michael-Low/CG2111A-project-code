@@ -124,9 +124,9 @@ def handleResponse(res: TPacket, publishPackets:bool=False):
             publish("arduino/recv", (res.packetType, res.command, params))
     elif res_type == TResponseType.RESP_COLOR:
         color = res.params[0]
-        if(color == Tcolor.RED):
+        if(color == Tcolor.RED.value):
             publish(COLOR_SENSOR_TOPIC, "red")
-        elif(color == Tcolor.GREEN):
+        elif(color == Tcolor.GREEN.value):
             publish(COLOR_SENSOR_TOPIC, "green")
         else:
             publish(COLOR_SENSOR_TOPIC, "unknown")

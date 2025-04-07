@@ -62,7 +62,7 @@ async def send_map_data(websocket):
                 await websocket.send(str(theta))
                 await websocket.send(mapbytes)
                 await websocket.recv() # wait for all data to be received on laptop side
-            if(len(color_messages > 0)):
+            if(len(color_messages) > 0):
                 color = PubSubMsg.getPayload(color_messages[-1])
                 await websocket.send("color")
                 await websocket.send(color)

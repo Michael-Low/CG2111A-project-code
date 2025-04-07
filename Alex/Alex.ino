@@ -141,7 +141,8 @@ void handleCommand(TPacket *command) {
       openclaw();
       break;
     case COMMAND_GET_COLOR:
-      sendColor(RED);
+      findColor();
+      sendColor(processcolor());
       //TODO: implement
       break;
     default:
@@ -159,6 +160,7 @@ void setup() {
   startSerial();
   enablePullups();
   initializeState();
+  setupColor();
   sei();
 }
 

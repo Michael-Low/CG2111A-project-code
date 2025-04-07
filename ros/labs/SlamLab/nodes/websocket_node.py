@@ -109,6 +109,10 @@ async def recv_commands(websocket):
                     params[0] = 50
                     params[1] = 50
                     command = TCommandType.COMMAND_FORWARD
+                case "open small":
+                    command = TCommandType.COMMAND_OPEN_SMALL_CLAW
+                case "close small":
+                    command = TCommandType.COMMAND_CLOSE_SMALL_CLAW
             commandPacket = (TPacketType.PACKET_TYPE_COMMAND, command, params)
             publish(ARDUINO_SEND_TOPIC, commandPacket)
             await websocket.send(f"Echo: {message}")

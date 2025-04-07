@@ -135,15 +135,20 @@ void handleCommand(TPacket *command) {
       clearOneCounter(command->params[0]);
       break;
     case COMMAND_CLOSE_CLAW:
-      closeclaw();
+      closeClaw();
       break;
     case COMMAND_OPEN_CLAW:
-      openclaw();
+      openClaw();
       break;
     case COMMAND_GET_COLOR:
       findColor();
       sendColor(processcolor());
-      //TODO: implement
+      break;
+    case COMMAND_OPEN_SMALL_CLAW:
+      openSmallClaw();
+      break;
+    case COMMAND_CLOSE_SMALL_CLAW:
+      closeSmallClaw();
       break;
     default:
       sendBadCommand();

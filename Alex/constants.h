@@ -42,6 +42,8 @@ typedef enum {
   COMMAND_OPEN_CLAW = 7,
   COMMAND_CLOSE_CLAW = 8,
   COMMAND_GET_COLOR = 9,
+  COMMAND_OPEN_SMALL_CLAW = 10,
+  COMMAND_CLOSE_SMALL_CLAW = 11,
 } TCommandType;
 
 // the names FORWARD and BACKWARD are defined by the adafruit library as 1 and 2 respectively

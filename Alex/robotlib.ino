@@ -70,7 +70,6 @@ void forward(int time, float speed)
 void backward(int time, float speed)
 { 
   stop_time = millis() + time;
-  newDist = dist - ((target_dist > 0) ? target_dist : 9999);
   dir = BACKWARD;
   move(speed, BACKWARD);
 }
@@ -80,7 +79,6 @@ void left(int time, float speed)
   stop_time = millis() + time;
   dir = LEFT;
   move(speed, LEFT);
-  newTicks = rightTicks + computeDeltaTicks(angle);
 }
 
 void right(int time, float speed)
@@ -88,7 +86,6 @@ void right(int time, float speed)
   stop_time = millis() + time;
   dir = RIGHT;
   move(speed, RIGHT);
-  newTicks = leftTicks + computeDeltaTicks(angle);
 }
 
 void stop()

@@ -20,6 +20,7 @@ def websocketThread(setupBarrier:Barrier=None, readyBarrier:Barrier=None):
     setupBarrier.wait() if readyBarrier != None else None
     print("starting websocket server")
     subscribe(topic=SLAM_MAPPOSE_TOPIC, ensureReply=True, replyTimeout=1)
+    subscribe(topic=COLOR_SENSOR_TOPIC, ensureReply=True, replyTimeout=1)
 
     # Wait for all Threads ready
     readyBarrier.wait() if readyBarrier != None else None
@@ -51,13 +52,21 @@ async def send_map_data(websocket):
         await websocket.recv()
         while True:
             messages = getMessages()
-            if(len(messages) > 0):
-                x, y, theta, mapbytes = PubSubMsg.getPayload(messages[-1])
+            map_messages = PubSubMsg.filterMessages(messages, SLAM_MAPPOSE_TOPIC)
+            color_messages = PubSubMsg.filterMessages(messages, COLOR_SENSOR_TOPIC)
+            if(len(map_messages) > 0):
+                x, y, theta, mapbytes = PubSubMsg.getPayload(map_messages[-1])
+                await websocket.send("map")
                 await websocket.send(str(x))
                 await websocket.send(str(y))
                 await websocket.send(str(theta))
                 await websocket.send(mapbytes)
                 await websocket.recv() # wait for all data to be received on laptop side
+            if(len(color_messages > 0)):
+                color = PubSubMsg.getPayload(color_messages[-1])
+                await websocket.send("color")
+                await websocket.send(color)
+                await websocket.recv()
             await asyncio.sleep(0.1)
     except Exception as e:
         print(f"Map WS exception: {e}")
@@ -85,7 +94,7 @@ async def recv_commands(websocket):
                     params[1] = 100
                     command = TCommandType.COMMAND_TURN_LEFT
                 case "r":
-                    params[0] = 120
+                    params[0] = 200
                     params[1] = 100
                     command = TCommandType.COMMAND_TURN_RIGHT
                 case "s":

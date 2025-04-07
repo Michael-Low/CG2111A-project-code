@@ -104,16 +104,17 @@ def lidarScanThread(setupBarrier:Barrier=None, readyBarrier:Barrier=None):
         for count, scan in enumerate(scan_generator()):
             current_round, results = process_scan((count,scan), scanState=current_round)
             if results and current_round["r"] > INITIAL_ROUNDS_IGNORED:
-                
-
-                # TODO: [Optional] Filter your results to reject low quality scans
-                # process_scan provides angle, distance and quality information
-                # The quality information can be used to filter out low quality scans
-                # You can filter the results based on the quality information here
-                # Or choose to filter the results elsewhere in the processing pipeline
-                
-
-                publish(LIDAR_SCAN_TOPIC, results)
+                filtered_angle = []
+                filtered_dist = []
+                filtered_quality = []
+                for i in range(len(results[0])):
+                    if results[2][i] != 0:
+                        filtered_angle.append(results[0][i])
+                        filtered_dist.append(results[1][i])
+                        filtered_quality.append(results[2][i])
+                filtered_results = (filtered_angle, filtered_dist, filtered_quality)
+                publish(LIDAR_SCAN_TOPIC, filtered_results)
+                # publish(LIDAR_SCAN_TOPIC, results)
 
             if ctx.isExit():
                 break

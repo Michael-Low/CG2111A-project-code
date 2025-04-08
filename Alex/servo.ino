@@ -5,11 +5,11 @@ Servo s2;
 Servo smallclaw;
 
 
-closeSmallClaw(){
+void closeSmallClaw(){
   smallclaw.write(90);
 }
 
-openSmallClaw(){
+void openSmallClaw(){
   smallclaw.write(0);  // tell servo to go to a particular 
 }
 

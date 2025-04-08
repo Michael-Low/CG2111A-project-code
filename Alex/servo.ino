@@ -7,7 +7,6 @@ Servo smallclaw;
 
 closeSmallClaw(){
   smallclaw.write(90);
-  
 }
 
 openSmallClaw(){
@@ -18,11 +17,13 @@ void setupServo() {
   smallclaw.attach (42,600,2300);
   myservo.attach(9,600,2300);  // (pin, min, max)
   s2.attach(10,600,2300);  // (pin, min, max)
+  closeClaw();
+  closeSmallClaw();
 }
 
 void closeClaw(){
   myservo.write(45);
-  s2.write(30);  
+  s2.write(30);
 }
 
 void openClaw(){

@@ -34,6 +34,11 @@ volatile long dist = 0;
 
 volatile long stop_time = 0;
 
+// Frequency read by photodiodes of color sensor
+uint32_t redFreq;
+uint32_t greenFreq;
+uint32_t blueFreq;
+
 /*
  * Setup and start codes for external interrupts and 
  * pullup resistors.

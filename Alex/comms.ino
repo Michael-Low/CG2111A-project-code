@@ -50,6 +50,9 @@ void sendColor(Tcolor color) {
   colorPacket.packetType = PACKET_TYPE_RESPONSE;
   colorPacket.command = RESP_COLOR;
   colorPacket.params[0] = color;
+  colorPacket.params[1] = redFreq;
+  colorPacket.params[2] = greenFreq;
+  colorPacket.params[3] = blueFreq;
   sendResponse(&colorPacket);
 }
 

@@ -8,13 +8,10 @@
 #define colorAverageDelay 20 // Milliseconds
 #define redthreshold 200
 
-// Frequency read by photodiodes of color sensor
-uint32_t redFreq;
-uint32_t greenFreq;
-uint32_t blueFreq;
+
 //takes in red,green and blue and processes the color
 uint32_t processcolor(){
-  if(redFreq < 100 || greenFreq <100 || blueFreq<100 )
+  if(redFreq < 120 && greenFreq < 120 && blueFreq < 120 )
     return 2;
   if(redFreq > 500 || greenFreq > 500 || blueFreq>500) 
     return 2;

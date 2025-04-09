@@ -46,6 +46,24 @@ async def start_map_server():
     await server.serve_forever()
 
 async def send_map_data(websocket):
+    async def sendColor(message, ws):
+        color, redFreq, greenFreq, blueFreq = PubSubMsg.getPayload(message)
+        await ws.send("color")
+        await ws.send(color)
+        await ws.send(redFreq)
+        await ws.send(greenFreq)
+        await ws.send(blueFreq)
+        await ws.recv()
+    
+    async def sendMap(message, ws):
+        x, y, theta, mapbytes = PubSubMsg.getPayload(message)
+        await ws.send("map")
+        await ws.send(str(x))
+        await ws.send(str(y))
+        await ws.send(str(theta))
+        await ws.send(mapbytes)
+        await ws.recv()
+
     print("Sending websocket connection established.")
     try:
         await websocket.send("hi")
@@ -55,18 +73,9 @@ async def send_map_data(websocket):
             map_messages = PubSubMsg.filterMessages(messages, SLAM_MAPPOSE_TOPIC)
             color_messages = PubSubMsg.filterMessages(messages, COLOR_SENSOR_TOPIC)
             if(len(map_messages) > 0):
-                x, y, theta, mapbytes = PubSubMsg.getPayload(map_messages[-1])
-                await websocket.send("map")
-                await websocket.send(str(x))
-                await websocket.send(str(y))
-                await websocket.send(str(theta))
-                await websocket.send(mapbytes)
-                await websocket.recv() # wait for all data to be received on laptop side
+                await sendMap(map_messages[-1], websocket)
             if(len(color_messages) > 0):
-                color = PubSubMsg.getPayload(color_messages[-1])
-                await websocket.send("color")
-                await websocket.send(color)
-                await websocket.recv()
+                await sendColor(color_messages[-1], websocket)
             await asyncio.sleep(0.1)
     except Exception as e:
         print(f"Map WS exception: {e}")

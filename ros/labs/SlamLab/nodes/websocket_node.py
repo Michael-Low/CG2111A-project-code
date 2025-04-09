@@ -105,6 +105,14 @@ async def recv_commands(websocket):
                     command = TCommandType.COMMAND_OPEN_CLAW
                 case "close":
                     command = TCommandType.COMMAND_CLOSE_CLAW
+                case "creep left":
+                    params[0] = 50
+                    params[1] = 100
+                    command = TCommandType.COMMAND_TURN_LEFT
+                case "creep right":
+                    params[0] = 50
+                    params[1] = 100
+                    command = TCommandType.COMMAND_TURN_RIGHT
                 case "creep":
                     params[0] = 50
                     params[1] = 50
